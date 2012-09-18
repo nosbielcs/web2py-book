@@ -5,16 +5,17 @@
 
 web2py vem com uma camada de abstração do banco de dados (DAL), basicamente é uma API que mapeia os objetos Python em objetos de banco de dados, como consultas, tabelas e registros. A DAL gera dinamicamente o SQL em tempo de execução utilizando um dialeto específico para o back-end do banco de dados, dessa forma você não precisa digitar códigos em SQL ou utilizar alguma linguagem específica de banco de dados, com isso sua aplicação será portável entre diferentes bancos de dados. Atualmente são suportados os seguintes bancos de dados: SQLite (nativo no Python e no web2py), PostgreSQL, MySQL, Oracle, MSSQL, Firebird, DB2, Informix, Ingres, Google App Engine (SQL e NoSQL) e MongoDB. Experimentalmente são suportados mais bancos de dados. Por favor, verifique no site do web2py e na lista de discussão os mais recentes adaptadores. O Google NoSQL é tratado de forma particular no capítulo 13.
 
-The Windows binary distribution works out of the box with SQLite and MySQL. The Mac binary distribution works out of the box with SQLite.
-To use any other database back-end, run from the source distribution and install the appropriate driver for the required back end.
+A distribuição binária para o Windows vem, por padrão, com o com SQLite e MySQL. A distribuição binária para Mac funciona vem com o SQLite.
+Para usar qualquer outro banco de dados back-end, executado a partir da distribuição do código fonte basta instalar o driver apropriado.
+
 ``database drivers``:inxx
 
-Once the proper driver is installed, start web2py from source, and it will find the driver. Here is a list of drivers:
+Uma vez que o driver correto esteja instalado, basta iniciar o web2py a partir do código, e ele encontrará o driver. Segue uma lista de drivers:
 
 ``DAL``:inxx ``SQLite``:inxx ``MySQL``:inxx ``PostgresSQL``:inxx ``Oracle``:inxx ``MSSQL``:inxx ``FireBird``:inxx ``DB2``:inxx ``Informix``:inxx ``Sybase``:inxx ``Teradata``:inxx ``MongoDB``:inxx ``CouchDB``:inxx ``SAPDB``:inxx ``Cubrid``:inxx
 
 ----------
-database | drivers (source)
+banco de dados | drivers (source)
 SQLite | sqlite3 or pysqlite2 or zxJDBC ``zxjdbc``:cite  (on Jython)
 PostgreSQL | psycopg2 ``psycopg2``:cite  or pg8000 ``pg8000``:cite or zxJDBC ``zxjdbc``:cite  (on Jython)
 MySQL | pymysql ``pymysql``:cite or MySQLdb ``mysqldb``:cite
@@ -32,54 +33,54 @@ MongoDB | pymongo ``pymongo``:cite
 IMAP | imaplib ``IMAP``:cite 
 ---------
 
-``sqlite3``, ``pymysql``, ``pg8000``, and ``imaplib`` ship with web2py. Support of MongoDB is experimental. The IMAP option allows to use DAL to access IAMP.
+``sqlite3``, ``pymysql``, ``pg8000``, e ``imaplib`` são fornecidos com o web2py. O suporte ao MongoDB é experimental. A opção IMAP permite usar a DAL para o acesso IAMP.
 
-web2py defines the following classes that make up the DAL:
+web2py define as seguintes classes que compõem a DAL:
 
-**DAL** represents a database connection. For example:
+**DAL** representa uma conexão com o banco de dados. Por exemplo:
 ``sqlite``:inxx
 ``
 db = DAL('sqlite://storage.db')
 ``:code
 
 ``define_table``:inxx
-**Table** represents a database table.  You do not directly instantiate Table; instead, ``DAL.define_table`` instantiates it.
+**Table** representa uma tabela do banco de dados. Você não pode instanciar uma tabela diretamente; a instância é criada com ``DAL.define_table``.
 ``
 db.define_table('mytable', Field('myfield'))
 ``:code
 
-The most important methods of a Table are:
+Os métodos mais importantes para manipulação de tabelas são:
 ``insert``:inxx
 ``truncate``:inxx
 ``drop``:inxx
 ``import_from_csv_file``:inxx
 ``count``:inxx
-``.insert``, ``.truncate``, ``.drop``, and ``.import_from_csv_file``.
+``.insert``, ``.truncate``, ``.drop``, e ``.import_from_csv_file``.
 
 ``Field``:inxx
-**Field** represents a database field. It can be instantiated and passed as an argument to ``DAL.define_table``.
+**Field** representa o campo de uma tabela no banco de dados. Ele pode ser instanciado e passado como argumento através do ``DAL.define_table``.
 
 ``Rows``:inxx
-**DAL Rows** ``Row``:inxx  is the object returned by a database select. It can be thought of as a list of ``Row`` rows:
+**DAL Rows** ``Row``:inxx é o objeto retornado pelo banco de dados selecionado. Ele pode ser interpretado como uma lista de ``Row`` linhas:
 ``
 rows = db(db.mytable.myfield!=None).select()
 ``:code
 
 ``Row``:inxx
-**Row** contains field values.
+**Row** contém os valores do campo.
 ``
 for row in rows:
     print row.myfield
 ``:code
 
 ``Query``:inxx
-**Query** is an object that represents a SQL "where" clause:
+**Query** é um objeto que representa a cláusula SQL "where":
 ``
 myquery = (db.mytable.myfield != None) | (db.mytable.myfield > 'A')
 ``:code
 
 ``Set``:inxx
-**Set** is an object that represents a set of records. Its most important methods are ``count``, ``select``, ``update``, and ``delete``. For example:
+**Set** é um objeto que representa um conjunto de registros. Seus métodos mais importantes são ``count``, ``select``, ``update``, e ``delete``. Por exemplo:
 ``
 myset = db(myquery)
 rows = myset.select()
@@ -88,7 +89,7 @@ myset.delete()
 ``:code
 
 ``Expression``:inxx
-**Expression** is something like an ``orderby`` or ``groupby`` expression. The Field class is derived from the Expression. Here is an example.
+**Expression** funciona como um ``orderby`` ou ``groupby``. O campo da classe é derivado da expressão. Veja um exemplo.
 ``
 myorder = db.mytable.myfield.upper() | db.mytable.id
 db().select(db.table.ALL, orderby=myorder)
