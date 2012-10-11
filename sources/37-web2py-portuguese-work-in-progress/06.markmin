@@ -162,7 +162,7 @@ will try the second and the third. This can also be used to distribute load
 in a database master-slave configuration. We will talk more about this
 in Chapter 13 in the context of scalability.
 
-### Reserved keywords
+### Palavras Reservadas
 ``reserved Keywords``:inxx
 
 There is also another argument that can be passed to the DAL constructor to check table names and column names against reserved SQL keywords in target back-end databases.
